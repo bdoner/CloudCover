@@ -16,7 +16,7 @@ funk.crt = function (post) {
         //Grab the domain name
         $("td:nth-of-type(4)").map(function(index, element) {
             if ($(this)) {
-                //TODO Remove any wildcard domains.
+                //JTODO Remove any wildcard domains.
                 //Write to array
                 domains.push($(this).text());
             }});
