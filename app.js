@@ -1,10 +1,10 @@
 //Dependencies
-var express = require("express");
-var mongoose = require("mongoose");
-var morgan = require("morgan");
-var fs = require("fs");
-var path = require("path");
-var bodyParser = require("body-parser");
+const express = require("express");
+const mongoose = require("mongoose");
+const morgan = require("morgan");
+const fs = require("fs");
+const path = require("path");
+const bodyParser = require("body-parser");
 
 //Configuration
 var app = express();

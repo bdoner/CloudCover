@@ -1,9 +1,9 @@
 var funk = {};
-var request = require("request");
-var cheerio = require("cheerio");
-var arrayUnique = require("array-unique");
-var dns = require("dns");
-var CC = require("../models/domain.js");
+const request = require("request");
+const cheerio = require("cheerio");
+const arrayUnique = require("array-unique");
+const dns = require("dns");
+const CC = require("../models/domain.js");
 
 funk.crt = function (post) {
     var domain = post;

@@ -1,7 +1,7 @@
-var express = require("express");
-var router = express.Router();
-var CC = require("../models/domain");
-var functions = require("../functions/main");
+const express = require("express");
+const router = express.Router();
+const CC = require("../models/domain");
+const functions = require("../functions/main");
 const {tldExists, getDomain} = require('tldjs');
 
 
