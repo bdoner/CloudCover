@@ -26,8 +26,6 @@ funk.crt = function (post) {
         //Remove duplicate domains
         var uniqueDomains = arrayUnique(domains);
 
-        return uniqueDomains;
-
         // Iterate over array and add to DB
         uniqueDomains.forEach(function(domain) {
 
