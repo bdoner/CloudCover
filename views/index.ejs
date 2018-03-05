@@ -1,0 +1,78 @@
+<% include ./partials/header.ejs %>
+
+<div class="container searchArea">
+    <div class="row">
+        <div class="col-lg-6 col-lg-offset-3">
+            <h1>Search for frontable domains</h1>
+            
+            
+            <form action="/new" method="POST">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for frontable domains" name="domain">
+                    <span class="input-group-btn">
+                        <button class="btn btn-success"><i class="fas fa-search"></i></button>
+                    </span>     
+                </div>
+            </form>
+
+        
+        </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
+    <div class="searchResults col-lg-6 col-lg-offset-3">
+        <img src="/images/3.svg" class="img-responsive center-block">
+    </div>
+</div>
+
+<div class="container">
+    <hr>
+    <div class="row">
+        <div class="col-lg-12">
+            <h2>Latest frontable domains</h2>
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Domain</th>
+                        <th scope="col">CName</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <% domains.forEach(function(domain) { %>
+                            <tr>
+                                <td><strong><%= domain.names %></strong></td>
+                                <td><%= domain.cname %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>
+                What is domain fronting?
+            </h2>
+            <p>
+                Domain fronting can be used to circumvent censorship. It relies on HTTPS and Content Delivery Networks (CDN). The vast majority of CDN providers doesn't look at the SNI, when choosing the  correct route to the requested domain. 
+                Rather they rely on the Host header, which is encrypted when the host uses HTTPS. So let's say Alice needs to send Bob a link to an, which is hosted at a CDN. 
+                However, Alice workplace has blocked the website the plan to use.
+            </p>
+        </div>
+        <div class="col-lg-6">
+            <h2>
+                How does Domain Fronting Work?
+            </h2>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi cupiditate dolore ducimus eaque id
+                iste laboriosam nesciunt nostrum officiis, optio quaerat quisquam quos tenetur. Eaque enim eveniet illum
+                itaque tempore!
+            </p>
+        </div>
+    </div>
+
+
+<% include ./partials/footer.ejs %>

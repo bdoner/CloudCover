@@ -1,0 +1,58 @@
+body {
+    margin: 0;
+    background-color: #1C2331;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    font-family: Raleway, sans-serif;
+}
+
+h2  {
+    color: white;
+    font-family: Raleway, sans-serif;
+    text-align: center;
+}
+
+p {
+    color: white;
+}
+
+.searchArea {
+    padding-top: 5%;
+}
+
+hr {
+    margin: 3% 0;
+}
+
+table {
+    background-color: #687ea9;
+}
+
+tr:nth-child(even), th {
+    background-color: #9aa9c5;
+}
+
+.fa-cloud {
+    height: 100%;
+}
+
+.table-container {
+    overflow: auto;
+    height: 300px;
+}
+
+.searchResults {
+    background-color: #9aa9c5;
+    margin-top: 1%;
+    display: none;
+    border-radius: 5px;
+    padding: 20px 20px;
+}
+
+.github {
+    color: white;
+    font-size: 4em;
+}
