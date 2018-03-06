@@ -8,6 +8,18 @@ $(document).on("keypress", function(event) {
     };
 });
 
+document.getElementById("searchButton").addEventListener("click", function(event) {
+    const searchBox = document.getElementById("searchBox").value;
+    fetch('/api/new/' + searchBox)
+     .then(function(res) {
+         return res.json();
+     })
+     .then(function(myJson) {
+         console.log(myJson);
+         document.querySelector(".searchResults").innerHTML = myJson;
+     })
+});
+
 function displayResults() {
     if ($(".search").val() == "") {
         console.log("Nah bruh");
