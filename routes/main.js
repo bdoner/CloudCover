@@ -3,6 +3,7 @@ const router = express.Router();
 const CC = require("../models/domain");
 const functions = require("../functions/main");
 const {tldExists, getDomain} = require('tldjs');
+const arrayUnique = require("array-unique");
 
 
 
@@ -28,10 +29,17 @@ router.post("/new", function(req, res) {
     }
 
     //TODO: Write all output to a single array, make sure there are no duplicates and write it to the DB.
-    functions.crt(post);
-    functions.threatcrowd(post);
+    const crt = functions.crt(post);
+    const threatcrowd = functions.threatcrowd(post);
 
-
+    Promise.all([
+        crt,
+        threatcrowd
+    ]).then(function(values) {
+        let domains = values;
+        // let domains = arrayUnique(values[0].concat(values[1]));
+        res.send(JSON.stringify(domains, null, '\t'));
+    });
 });
 
 module.exports = router;

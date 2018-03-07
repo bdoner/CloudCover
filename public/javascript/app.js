@@ -13,5 +13,16 @@ function displayResults() {
         console.log("Nah bruh");
     } else {
     $(".searchResults").slideDown("slow");
+
+    fetch("/api/new")
+        .then(function(response) {
+            $(".searchResults").innerHTML(response);
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+
     };
 };
+
+$("#searchBox").focus();

@@ -29,22 +29,24 @@ funk.crt = function (post) {
 
             // Iterate over array and add to DB
             uniqueDomains.forEach(function (domain) {
-
-                // Resolve CNames
-                dns.resolveCname(domain, function (error, address) {
-                    if (!error) {
-                        CC.create({names: domain, cname: address}, function (error, insertedDomain) {
-                            if (error) {
-                                console.log(error)
-                            } else {
-                                console.log(insertedDomain);
-                            }
-                            ;
-                        });
-                    }
-                    ;
+                return new Promise((resolve, reject) => {
+                        // Resolve CNames
+                        dns.resolveCname(domain, function (error, address) {
+                        if (!error) {
+                            CC.create({names: domain, cname: address}, function (error, insertedDomain) {
+                                if (error) {
+                                    console.log(error);
+                                    reject(error);
+                                } else {
+                                    resolve(insertedDomain);
+                                    console.log(insertedDomain);
+                                };
+                            });
+                        };
+                    });
                 });
             });
+            return Promise.all(uniqueDomains);
         })
             .catch(function(error) {
         console.error("Something went wrong with CRT", error);
@@ -64,13 +66,16 @@ funk.threatcrowd = function(post) {
             }
                 //Insert every subdomain to the DB.
                 body.subdomains.forEach(function (domain) {
-                    // Resolve CNames
-                    dns.resolveCname(domain, function (error, address) {
+                    return new Promise((resolve, reject) => {
+                        // Resolve CNames
+                        dns.resolveCname(domain, function (error, address) {
                         if (!error) {
                             CC.create({names: domain, cname: address}, function (error, insertedDomain) {
                                 if (error) {
                                     console.log(error)
+                                    reject(error);
                                 } else {
+                                    resolve(insertedDomain);
                                     console.log(insertedDomain);
                                 };
 
@@ -79,6 +84,8 @@ funk.threatcrowd = function(post) {
 
                     });
                 });
+                });
+            return Promise.all(body.subdomains);
         })
         .catch(function(error) {
         console.error("Something went wrong with Threatcrowd", error);
