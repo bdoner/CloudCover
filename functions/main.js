@@ -1,76 +1,88 @@
 var funk = {};
-const request = require("request");
 const cheerio = require("cheerio");
 const arrayUnique = require("array-unique");
 const dns = require("dns");
 const CC = require("../models/domain.js");
+const needle = require("needle");
 
 funk.crt = function (post) {
-    var domain = post;
-    request("https://crt.sh/?q=%25." + domain, function(error, response, body) {
-        var $ = cheerio.load(body);
+    needle("get", "https://crt.sh/?q=%25." + post)
+        .then (function(response) {
+            var $ = cheerio.load(response.body);
 
-        //Create temp array to store domains in
-        var domains = [];
+            //Create temp array to store domains in
+            var domains = [];
 
-        //Grab the domain name
-        $("td:nth-of-type(4)").map(function(index, element) {
-            if ($(this)) {
-                //JTODO Remove any wildcard domains.
-                //Write to array
-                domains.push($(this).text());
-            }});
+            //Grab the domain name
+            $("td:nth-of-type(4)").map(function (index, element) {
 
+                let domainName = $(this).text();
+                if (!domainName.startsWith("*")) {
+                    //Write to array
+                    domains.push(domainName);
+                }
 
-
-        //Remove duplicate domains
-        var uniqueDomains = arrayUnique(domains);
-
-        // Iterate over array and add to DB
-        uniqueDomains.forEach(function(domain) {
-
-            // Resolve CNames
-            dns.resolveCname(domain, function(error, address) {
-                if (!error) {
-                    CC.create({names: domain, cname: address}, function(error, insertedDomain) {
-                        if(error) {
-                            console.log(error)
-                        } else {
-                            console.log(insertedDomain);
-                        };
-                    });
-                };
             });
-        });
 
-    });
-};
+            //Remove duplicate domains
+            var uniqueDomains = arrayUnique(domains);
 
-funk.threatcrowd = function(post) {
-    var domain = post;
-    request("https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=" + domain, function(error, response, body) {
-        var body = JSON.parse(body);
-        if (body.response_code == "0") {
-            console.log("No information about that domain, sorry.");
-        } else {
-            var subdomains = body.subdomains;
-            subdomains.forEach(function(domain) {
+            // Iterate over array and add to DB
+            uniqueDomains.forEach(function (domain) {
+
                 // Resolve CNames
-                dns.resolveCname(domain, function(error, address) {
+                dns.resolveCname(domain, function (error, address) {
                     if (!error) {
-                        CC.create({names: domain, cname: address}, function(error, insertedDomain) {
-                            if(error) {
+                        CC.create({names: domain, cname: address}, function (error, insertedDomain) {
+                            if (error) {
                                 console.log(error)
                             } else {
                                 console.log(insertedDomain);
-                            };
+                            }
+                            ;
                         });
-                    };
+                    }
+                    ;
                 });
             });
-            console.log("______________________");
-        };
-    });
+        })
+            .catch(function(error) {
+        console.error("Something went wrong with CRT", error);
+    })
+};
+
+funk.threatcrowd = function(post) {
+    needle("get", "https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=" + post)
+        .then (function(response) {
+
+            //assign body to constant.
+            const body = response.body;
+
+            //Check if threatcrowd has any information about the specific domain.
+            if (body.response_code == "0") {
+               console.log("no information about that domain");
+            }
+                //Insert every subdomain to the DB.
+                body.subdomains.forEach(function (domain) {
+                    // Resolve CNames
+                    dns.resolveCname(domain, function (error, address) {
+                        if (!error) {
+                            CC.create({names: domain, cname: address}, function (error, insertedDomain) {
+                                if (error) {
+                                    console.log(error)
+                                } else {
+                                    console.log(insertedDomain);
+                                };
+
+                            });
+                        };
+
+                    });
+                });
+        })
+        .catch(function(error) {
+        console.error("Something went wrong with Threatcrowd", error);
+        })
 };
 
 module.exports = funk;
