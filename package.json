@@ -18,7 +18,7 @@
     "express": "^4.16.2",
     "mongoose": "^5.0.8",
     "morgan": "^1.9.0",
-    "request": "^2.83.0",
+    "needle": "^2.2.0",
     "tldjs": "^2.3.1",
     "validator": "^9.4.1"
   }
