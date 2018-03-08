@@ -9,8 +9,12 @@ $(document).on("keypress", function(event) {
 });
 
 function displayResults() {
-    if ($(".search").val() == "") {
-        console.log("Nah bruh");
+    if ($("#searchBox").val() == "") {
+        swal({
+            type: "error",
+            title: "Slow down captain.",
+            text: "You cannot request an empty domain."
+            });
     } else {
     $(".searchResults").slideDown("slow");
 
