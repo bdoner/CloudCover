@@ -36,8 +36,7 @@ router.post("/new", function(req, res) {
         crt,
         threatcrowd
     ]).then(function(values) {
-        let domains = values;
-        // let domains = arrayUnique(values[0].concat(values[1]));
+        let domains = arrayUnique(values[0].concat(values[1]));
         res.send(JSON.stringify(domains, null, '\t'));
     });
 });
