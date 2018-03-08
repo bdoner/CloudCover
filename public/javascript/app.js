@@ -14,15 +14,17 @@ function displayResults() {
     } else {
     $(".searchResults").slideDown("slow");
 
-    fetch("/api/new")
-        .then(function(response) {
-            $(".searchResults").innerHTML(response);
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
+        const searchBox = $("#searchBox").val();
 
-    };
+        fetch("/new/" + searchBox)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(myJSON) {
+                $(".searchResults").html(myJSON + "......");
+            });
+
+        };
 };
 
 $("#searchBox").focus();

@@ -4,6 +4,7 @@ const CC = require("../models/domain");
 const functions = require("../functions/main");
 const {tldExists, getDomain} = require('tldjs');
 const arrayUnique = require("array-unique");
+const dns = require("dns");
 
 
 
@@ -19,16 +20,16 @@ router.get("/", function(req, res) {
     });
 });
 
-router.post("/new", function(req, res) {
+router.get("/new/:id", function(req, res) {
     //Strip all subdomains - the post var now only contains the domain and TLD.
-    var post = getDomain(req.body.domain);
+    var post = getDomain(req.params.id);
     console.log(post);
     //Check if the user inserts a valid TLD.
     if (!tldExists(post)) {
         return res.redirect("/");
     }
 
-    //TODO: Write all output to a single array, make sure there are no duplicates and write it to the DB.
+    //TODO:  Write it to the DB.
     const crt = functions.crt(post);
     const threatcrowd = functions.threatcrowd(post);
 
@@ -38,6 +39,27 @@ router.post("/new", function(req, res) {
     ]).then(function(values) {
         let domains = arrayUnique(values[0].concat(values[1]));
         res.send(JSON.stringify(domains, null, '\t'));
+
+        //Write it to the DB.
+        domains.forEach(function (domain) {
+                // Resolve CNames
+                dns.resolveCname(domain, function (error, address) {
+                if (!error) {
+                    CC.create({names: domain, cname: address}, function (error, insertedDomain) {
+                        if (error) {
+                            console.log(error)
+                        } else {
+                            console.log(insertedDomain);
+
+                        };
+
+                    });
+                };
+
+            });
+        });
+
+
     });
 });
 
