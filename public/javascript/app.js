@@ -25,7 +25,12 @@ function displayResults() {
                 return response.json();
             })
             .then(function(myJSON) {
-                $(".searchResults").html(myJSON + "......");
+                $(".searchResults").html("<ul>");
+
+                myJSON.forEach(function(entry) {
+                    $(".searchResults").append("<li>" + entry + "</li>");
+                });
+                $(".searchResults").append("</ul>");
             });
 
         };
