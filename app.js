@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
 const bodyParser = require("body-parser");
+const config = require("./config.json");
 
 //Configuration
 var app = express();
@@ -18,7 +19,7 @@ var accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
 app.use(morgan('combined', {stream: accessLogStream}));
 
 //MongoDB setup
-mongoose.connect("mongodb://localhost/CC");
+mongoose.connect(config.mongoConnection);
 
 
 //ROUTE FILES
