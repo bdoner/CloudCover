@@ -47,7 +47,6 @@ router.get("/api/new/:domain", function(req, res) {
         });
 
         res.send(JSON.stringify(domains, null, '\t'))
-    });
 
         //Write it to the DB.
         domains.forEach(function (domain) {
@@ -67,8 +66,6 @@ router.get("/api/new/:domain", function(req, res) {
 
             });
         });
-
-
     });
 });
 

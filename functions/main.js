@@ -1,8 +1,6 @@
 var funk = {};
 const request = require("request");
-const needle = require('needle');
 const chalk = require('chalk');
-
 const cheerio = require("cheerio");
 const arrayUnique = require("array-unique");
 const dns = require("dns");
